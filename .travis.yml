@@ -1,0 +1,17 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t ecastroaleman/react-test -f ./client/Dockerfile.dev ./client
+ 
+
+script:
+  - docker run ecastroaleman/react-test npm test -- --coverage
+
+
+after_success:
+  - docker build -t ecastroaleman/multi-client ./client
+  - docker build -t ecastroaleman/multi-nginx ./nginx
+  - docker build -t ecastroaleman/multi-server ./server
+  - docker build -t ecastroaleman/multi-worker ./worker
